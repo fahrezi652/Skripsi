@@ -19,6 +19,7 @@ export default function AddDara(){
         Kab_kota: "",
         opening_hours: "",
         photo_url: "",
+        type: "Cafe",
         rating: 0,
         reviews: 0
       });
@@ -96,7 +97,8 @@ export default function AddDara(){
                     opening_hours: formData.opening_hours,
                     photo_url: formData.photo_url,
                     rating: Number(formData.rating),
-                    reviews: Number(formData.reviews)
+                    reviews: Number(formData.reviews),
+                    type: formData.type
                 },
               }),
             });
@@ -174,6 +176,15 @@ export default function AddDara(){
                         >
                             <p>Waktu Buka</p>
                             <input className="w-full rounded-md shadow-xl p-1" value={formData.opening_hours} onChange={({ target }) => setFormData({ ...formData, opening_hours: target.value })} placeholder="Monday: 7:00 AM – 7:00 PM, ..." type="text" />
+                        </div>
+                        <div
+                            className="flex flex-col w-full gap-2"
+                        >
+                            <p>Type</p>
+                            <select className="w-full rounded-md shadow-xl p-1" value={formData.type} onChange={({ target }) => setFormData({ ...formData, type: target.value })} placeholder="Cafe/Resto">
+                              <option value="Cafe">Cafe</option>
+                              <option value="Resto">Resto</option>
+                            </select>
                         </div>
                         <div
                             className="flex flex-col w-full gap-2"

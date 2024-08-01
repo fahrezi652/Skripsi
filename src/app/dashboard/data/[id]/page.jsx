@@ -29,7 +29,7 @@ export default function DataId({params}){
             <>
                 <Navbar dashboard />
                 <main className="relative p-5 px-20 flex justify-center items-center gap-32 bg-[#f5f5f5] min-h-[calc(100vh-40px-93px)]">
-                    <img className="w-5/12 aspect-auto rounded-xl" src={data.photo_url} alt="" />
+                    <img className="w-5/12 aspect-auto rounded-xl" src={data.photo_url || "/illustration.png"} alt="" />
                     <div
                         className="w-5/12 bg-[#4AFF92] p-5 rounded-lg"
                     >
