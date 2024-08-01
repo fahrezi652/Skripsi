@@ -3,7 +3,7 @@ import { signIn } from "next-auth/react";
 import { useFormState } from "react-dom";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const initialState = {
     message: null,
@@ -11,13 +11,17 @@ const initialState = {
 
 export default function LoginPage(){
     const {status} = useSession()
+    const [loginMessage, setLoginMessage] = useState("")
     useEffect(() => {
         if(status == "authenticated"){
             redirect("/dashboard/map")
         }
     }, [status])
     const login = async (prevState, formData) => {
-        
+        if(formData.get("username") == "" && formData.get("password") == ""){
+            setLoginMessage("Username and Password required")
+            return { message: "Username and Password required" };
+        }
         try {
             const status = await signIn("credentialsAuth", {
                 redirect: false,
@@ -27,6 +31,7 @@ export default function LoginPage(){
             });
             if(status?.error){
                 console.log(status?.error)
+                setLoginMessage(status?.error)
                 return { message: status?.error };
             }
             console.log("success")
@@ -42,6 +47,7 @@ export default function LoginPage(){
             <div
                 className="p-5 rounded-lg bg-[#4AFF92] min-w-[400px]"
             >
+                {loginMessage != "" && <p className="py-1 px-4 mb-2 rounded-lg bg-red-500 text-white font-bold text-center">{loginMessage.replace(" Please sign up!","")}</p>}
                 <p className="text-xl text-center font-bold">Login Admin</p>
                 <form className="w-full flex flex-col items-center" action={loginAction}>
                 <div
