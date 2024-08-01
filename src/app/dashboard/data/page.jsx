@@ -19,11 +19,11 @@ export default function DataPage(){
     const [type, setType] = useState("")
     const [rating, setRating] = useState(0)
     const {status} = useSession()
-    // useEffect(() => {
-    //     if(status == "unauthenticated"){
-    //         redirect("/")
-    //     }
-    // }, [status])
+    useEffect(() => {
+        if(status == "unauthenticated"){
+            redirect("/")
+        }
+    }, [status])
 
     const [currentFilter, setCurrentFilter] = useState({
         search: "",

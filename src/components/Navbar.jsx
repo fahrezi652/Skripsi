@@ -60,11 +60,13 @@ export default function Navbar({dashboard}){
                 <img className="w-[150px] h-auto" src="/logo.png" alt="Logo" />
             </a>
 
-            <div className="flex gap-24 text-[#00840D]">
-            <a href="/">Home</a>
-            <a href="/map">Map</a>
-            <a href="/data">Data</a>
-            </div>
+            { !dashboard &&
+                <div className="flex gap-24 text-[#00840D]">
+                    <a href="/">Home</a>
+                    <a href="/map">Map</a>
+                    <a href="/data">Data</a>
+                </div>
+            }
         </nav>
     )
 }

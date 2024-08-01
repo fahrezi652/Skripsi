@@ -1,7 +1,7 @@
 "use client";
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-
+import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import dynamic from 'next/dynamic'

@@ -6,7 +6,15 @@ import MarkerIcon from "leaflet/dist/images/marker-icon.png";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from "react-leaflet";
 import { Dropdown } from "flowbite-react";
+import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 export default function MapComponent(){
+    const {status} = useSession()
+    useEffect(() => {
+        if(status == "unauthenticated"){
+            redirect("/")
+        }
+    }, [status])
     const RestoType = ["Cafe", "Resto"]
     const [loading, setLoading] = useState(true);
     const [geolocs, setGeolocs] = useState([]);

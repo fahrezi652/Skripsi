@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import dynamic from 'next/dynamic'
-const MapComp = dynamic(() => import('@/components/MapComponent'), { ssr: false });
+const MapComp = dynamic(() => import('@/components/MapComponentAuth'), { ssr: false });
 export default function Map(){
 
 
