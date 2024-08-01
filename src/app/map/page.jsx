@@ -165,7 +165,7 @@ export default function Map(){
             <Navbar />
             <main className="relative w-full min-h-[calc(100vh-40px-93px)]">
             {loading ? <Loader /> : null}
-            <MapContainer
+            {window != undefined && <MapContainer
                 center={[-6.9004894, 107.6298902]}
                 zoom={9}
                 scrollWheelZoom={true}
@@ -254,7 +254,7 @@ export default function Map(){
                     );
                 })}
 
-            </MapContainer>
+            </MapContainer>}
             <div className="fixed top-28 z-[999999] flex items-start w-fit">
                 <div>
                     <Card className="max-w-sm mt-30 fixed top-15 right-0 z-1200 rounded-none">
