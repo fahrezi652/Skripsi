@@ -1,0 +1,44 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    name          String?
+    username         String?   @unique
+    emailVerified DateTime?
+    password      String
+    salt          String
+    // image         String?
+    // accounts      Account[]
+    // sessions      Session[]
+}
+
+model GeoLocation {
+    id       String    @id @default(auto()) @map("_id") @db.ObjectId
+    geoId    Int?
+    name     String
+    geojs    Json
+    geodatas GeoData[]
+}
+
+model GeoData {
+    id               String      @id @default(auto()) @map("_id") @db.ObjectId
+    geoloc_id        String      @db.ObjectId
+    geoloc           GeoLocation @relation(fields: [geoloc_id], references: [id], onDelete: Cascade)
+    maps_link        String
+    Kab_kota         String
+    type             String
+    opening_hours    String
+    photo_url        String
+    latitude         Float
+    longitude        Float
+    rating           Float
+    reviews          Int
+    title            String
+}
