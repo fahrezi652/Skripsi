@@ -104,7 +104,7 @@ export default function AddDara(){
             });
             const { message } = await res.json();
             if (res.status == 201) {
-              router.push("/dashboard/data");
+              router.push("/dashboard/data?success=true&&message=Data berhasil ditambahkan");
             } else {
             }
           };

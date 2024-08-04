@@ -198,8 +198,9 @@ export default function MapComponent(){
                             >
                                 <Popup>
                                     <div className="max-w-[240px]">
-                                        {item.title} <br />
-                                        Cafe/Restaurant
+                                        <a target="_blank" href={item.maps_link}>{item.title}</a>
+                                        <br />
+                                        {item.type}
                                         <br />
                                         {item.rating}
                                         <br />

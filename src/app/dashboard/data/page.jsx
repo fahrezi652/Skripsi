@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import { Button, Modal, Dropdown } from "flowbite-react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 const TABLE_HEAD = ["No", "Nama", "Type", "Rating", "Review", "Kota/Kabupaten", "Maps", "Action"];
  
 export default function DataPage(){
@@ -19,9 +19,19 @@ export default function DataPage(){
     const [type, setType] = useState("")
     const [rating, setRating] = useState(0)
     const {status} = useSession()
+    const [message, setMessage] = useState("")
+    const [toastStatus, setToastStatus] = useState(false)
+    const searchParams = useSearchParams()
     useEffect(() => {
         if(status == "unauthenticated"){
             redirect("/")
+        }
+        if(searchParams.get('success')){
+            setMessage(searchParams.get('message'))
+            setToastStatus(true)
+            setTimeout(() => {
+                setToastStatus(false)
+            }, 2000)
         }
     }, [status])
 
@@ -63,26 +73,26 @@ export default function DataPage(){
       setLoading(false)
   };
   const geodataSearch = async () => {
-      setGeodatas({ data: [], count: 0 });
-      const res = await fetch(
-          "/api/geodata/search?" +
-          new URLSearchParams({
-            filter: currentFilter.search,
+    setGeodatas({ data: [], count: 0 });
+    const res = await fetch(
+        "/api/geodata/search?" +
+        new URLSearchParams({
+            filter: currentFilter.search.replace(/([()[\]])/g, '\\$1'),
             take: currentFilter.take.toString(),
             page: currentFilter.page.toString(),
             type: type,
             rating: rating,
             kabkota: kabkota
         }),
-          {
-              method: "GET",
-          }
-      );
-      const { data, count } = await res.json();
-      
-      setGeodatas({ data: data, count: count });
-      setLoading(false)
-  };
+        {
+            method: "GET",
+        }
+    );
+    const { data, count } = await res.json();
+    
+    setGeodatas({ data: data, count: count });
+    setLoading(false)
+};
   const geodataDelete = async (id) => {
     const res = await fetch("/api/geodata/delete", {
         method: "POST",
@@ -111,6 +121,15 @@ export default function DataPage(){
         <>
             <Navbar dashboard />
             <main className="relative p-5 px-20 flex flex-col justify-between items-end gap-5 bg-[#f5f5f5] min-h-[calc(100vh-40px-93px)]">
+                <div
+                    className={` ${toastStatus == "" ? "opacity-0" : "opacity-100"} transition-all delay-500 absolute -top-12 left-0 right-0 flex items-center justify-center`}
+                >
+                    <p
+                        className="py-2 px-5 bg-white z-50 rounded-lg font-bold "
+                    >
+                        {message}
+                    </p>
+                </div>
                 {loading && <Loader />}
                 <div className="flex gap-10">
                 <div className="flex gap-1">
@@ -170,19 +189,27 @@ export default function DataPage(){
                         <Dropdown.Item onClick={() => {setKabkota("");setCurrentFilter({ ...currentFilter, mode: "search", toggle: !currentFilter.toggle, page: 1 })}}>
                             Kabupaten/Kota
                         </Dropdown.Item>
-                        {kabkotaList.length > 0 && kabkotaList.map(d => 
-                            <Dropdown.Item onClick={() => {setKabkota(d.Kab_kota);setCurrentFilter({ ...currentFilter, mode: "search", toggle: !currentFilter.toggle, page: 1 })}}>
+                        {kabkotaList.length > 0 && kabkotaList.map((d,i) => 
+                            <Dropdown.Item key={"kabkota"+i} onClick={() => {setKabkota(d.Kab_kota);setCurrentFilter({ ...currentFilter, mode: "search", toggle: !currentFilter.toggle, page: 1 })}}>
                                 {d.Kab_kota}
                             </Dropdown.Item>
                         )}
                     </Dropdown>
-                  <div className="w-[300px] relative">
-                      <input type="text" placeholder="Search" className="w-full p-2 rounded-md shadow-xl" value={currentFilter.search}
-                          onChange={({ target }) => {
-                              setCurrentFilter({ ...currentFilter, search: target.value, mode: "search", toggle: !currentFilter.toggle, page: 1 });
-                          }} />
-                      <img src="/search.png" className="w-5 h-auto absolute top-[10px] right-[10px]" alt="" />
-                  </div>
+                    <form
+                        className="w-[300px] relative flex shadow-xl border-2" 
+                        onSubmit={(e) => {e.preventDefault();setCurrentFilter({ ...currentFilter, toggle: !currentFilter.toggle });}}
+                    >
+                            <input type="text" placeholder="Search" className="w-full p-2 rounded-l-md border-none outline-none focus:outline-none focus:border-none" value={currentFilter.search}
+                                onChange={({ target }) => {
+                                    setCurrentFilter({ ...currentFilter, search: target.value, mode: "search", page: 1 });
+                                }} />
+                            <button
+                                className="p-2 bg-white rounded-r-md"
+                                type="submit"
+                            >
+                                <img src="/search.png" className="" alt="" />
+                            </button>
+                    </form>
                    <a href="/dashboard/addData" className="bg-[#D9D9D9] text-center min-w-[200px] flex justify-center items-center rounded-full border shadow-xl border-black">
                      Add Data
                    </a>

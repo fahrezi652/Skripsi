@@ -10,7 +10,7 @@ function Map(){
 
     return(
         <>
-            <Navbar />
+            <Navbar map />
             <MapComp />
             <Footer />
         </>

@@ -58,7 +58,7 @@ export default function DataPage(){
       const res = await fetch(
           "/api/geodata/search?" +
           new URLSearchParams({
-              filter: currentFilter.search,
+              filter: currentFilter.search.replace(/([()[\]])/g, '\\$1'),
               take: currentFilter.take.toString(),
               page: currentFilter.page.toString(),
               type: type,
@@ -89,7 +89,7 @@ export default function DataPage(){
 
     return(
         <>
-            <Navbar />
+            <Navbar data />
             <main className="relative p-5 px-20 flex flex-col justify-between items-end gap-5 bg-[#f5f5f5] min-h-[calc(100vh-40px-93px)]">
                 {loading && <Loader />}
                 <div className="flex gap-2 items-center">
@@ -156,13 +156,21 @@ export default function DataPage(){
                             </Dropdown.Item>
                         )}
                     </Dropdown>
-                    <div className="w-[300px] relative">
-                        <input type="text" placeholder="Search" className="w-full p-2 rounded-md shadow-xl" value={currentFilter.search}
-                            onChange={({ target }) => {
-                                setCurrentFilter({ ...currentFilter, search: target.value, mode: "search", toggle: !currentFilter.toggle, page: 1 });
-                            }} />
-                        <img src="/search.png" className="w-5 h-auto absolute top-[10px] right-[10px]" alt="" />
-                    </div>
+                    <form
+                        className="w-[300px] relative flex shadow-xl border-2" 
+                        onSubmit={(e) => {e.preventDefault();setCurrentFilter({ ...currentFilter, toggle: !currentFilter.toggle });}}
+                    >
+                            <input type="text" placeholder="Search" className="w-full p-2 rounded-l-md border-none outline-none focus:outline-none focus:border-none" value={currentFilter.search}
+                                onChange={({ target }) => {
+                                    setCurrentFilter({ ...currentFilter, search: target.value, mode: "search", page: 1 });
+                                }} />
+                            <button
+                                className="p-2 bg-white rounded-r-md"
+                                type="submit"
+                            >
+                                <img src="/search.png" className="" alt="" />
+                            </button>
+                    </form>
                 </div>
                 <table className="w-full min-w-max table-auto text-left bg-white rounded-lg h-full">
                     <thead>

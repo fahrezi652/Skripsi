@@ -20,6 +20,9 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2:wght@400..800&family=Koh+Santepheap:wght@100;300;400;700;900&display=swap" rel="stylesheet" />
+        <title>
+          CaReMap
+        </title>
       </head>
       <body className={inter.className}>
       <SessionProvider session={session}> 
