@@ -31,6 +31,7 @@ export default function DataPage(){
             setToastStatus(true)
             setTimeout(() => {
                 setToastStatus(false)
+                window.location.search = ""
             }, 2000)
         }
     }, [status])
